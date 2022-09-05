@@ -2,8 +2,7 @@
 
 from funciones import *
 
-
-consultar_api_finanzas()
-
 fechas=ingresar_fechas()
-print("respuestas de la funcion: ",fechas)
+especie=input("Ingrese la especie financiera a consultar")
+consultar_api_finanzas(especie,fechas[0],fechas[1])
+

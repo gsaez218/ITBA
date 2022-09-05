@@ -11,8 +11,8 @@ def ingresar_fechas():
     b_fecha_fin = 0  # bandeara oara conocer el estado de la fecha fin ingresada
     while b_fecha_inicio == 0:
         try:
-            fecha_inicio = input("Ingresa la feha inicio de su consulta en el formato YYYY/MM/DD: ")
-            fecha = datetime.strptime(fecha_inicio, '%Y/%m/%d')
+            fecha_inicio = input("Ingresa la feha inicio de su consulta en el formato YYYY-MM-DD: ")
+            fecha = datetime.strptime(fecha_inicio, '%Y-%m-%d')
             # print("Fecha válida")
             b_fecha_inicio = 1
         except ValueError:
@@ -21,8 +21,8 @@ def ingresar_fechas():
 
     while b_fecha_fin == 0:
         try:
-            fecha_fin = input("Ingresa la feha final de su consulta en el formato YYYY/MM/DD: ")
-            fecha = datetime.strptime(fecha_fin, '%Y/%m/%d')
+            fecha_fin = input("Ingresa la feha final de su consulta en el formato YYYY-MM-DD: ")
+            fecha = datetime.strptime(fecha_fin, '%Y-%m-%d')
             # print("Fecha final válida")
             b_fecha_fin = 1
 
@@ -45,9 +45,9 @@ def ingresar_fechas():
 ####################################################################################
 # FUNCION CONSULTA API DE FINANZAS
 ####################################################################################
-def consultar_api_finanzas():
+def consultar_api_finanzas(especie,fecha_inicio,fecha_fin):#,fecha_inicio,fecha_fin):
     # Obtenemos la información del mensaje en formato JSON del repositorio consultando la API
-    json_file = requests.get("https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/2022-08-18/2022-08-21?adjusted=true&sort=asc&limit=120&apiKey=kgNXTHqp5bQH1_H3RcUbUQFk73CB59Z3")
+    json_file = requests.get(f"https://api.polygon.io/v2/aggs/ticker/{especie}/range/1/day/{fecha_inicio}/{fecha_fin}?adjusted=true&sort=asc&limit=120&apiKey=kgNXTHqp5bQH1_H3RcUbUQFk73CB59Z3")
     print(json_file.text)
 
     # Longitud en bytes del archivo
