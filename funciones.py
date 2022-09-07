@@ -66,6 +66,7 @@ def consultar_api_finanzas(especie,fecha_inicio,fecha_fin):#,fecha_inicio,fecha_
         # print(lista_resultados)
         #print(type(lista_resultados))
   #aqui recorremos los difernetes valores de la lista y los mostramos (aca iran guardandose los registros en la BD)
+
     for indice in lista_resultados:
         print("Volúmen = ",indice['v'])
         print("Precio de apertura = ",indice['o'])
