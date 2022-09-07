@@ -13,8 +13,10 @@ def ingresar_fechas():
         try:
             fecha_inicio = input("Ingresa la feha inicio de su consulta en el formato YYYY-MM-DD: ")
             fecha = datetime.strptime(fecha_inicio, '%Y-%m-%d')
-            # print("Fecha válida")
-            b_fecha_inicio = 1
+            if (fecha<=datetime.today()):       # comprueba que la fecha sea igual o anterior al dia de hoy
+                b_fecha_inicio = 1
+            else:
+                print("la fecha debe ser igual o anterior al día de hoy, reigrésela")
         except ValueError:
             print("Fecha inicial inválida, por favor reingrésela")
             b_fecha_inicio = 0  # si la fecha ingrfesada no es valida, repite el ciclo hasta que este correcta.
@@ -23,16 +25,16 @@ def ingresar_fechas():
         try:
             fecha_fin = input("Ingresa la feha final de su consulta en el formato YYYY-MM-DD: ")
             fecha = datetime.strptime(fecha_fin, '%Y-%m-%d')
-            # print("Fecha final válida")
-            b_fecha_fin = 1
-
+            if (fecha<=datetime.today()):       # comprueba que la fecha sea igual o anterior al dia de hoy
+                b_fecha_fin = 1
+            else:
+                print("la fecha debe ser igual o anterior al día de hoy, reigrésela")
         except ValueError:
             print("Fecha final inválida, por favor reingrésela")
             b_fecha_fin = 0  # si la fecha ingrfesada no es valida, repite el ciclo hasta que este correcta.
 
     if fecha_fin < fecha_inicio:  # verificamos si la fecha final es mayor que la inicial, si no es así las invertimos
-        print(
-            "Nota: al ser la fecha inicial posterior a la fecha final, se invertirán las mismas para proporcionar el rango correcto de fechas en su consulta")
+        print("Nota: al ser la fecha inicio posterior a la fecha final, se invertirán las mismas para proporcionar el rango correcto de fechas en su consulta")
         fecha_auxiliar = fecha_fin
         fecha_fin = fecha_inicio
         fecha_inicio = fecha_auxiliar
