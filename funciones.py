@@ -1,5 +1,6 @@
 from datetime import datetime
 import requests
+import sqlite3
 
 
 ####################################################################################
@@ -65,13 +66,74 @@ def consultar_api_finanzas(especie,fecha_inicio,fecha_fin):#,fecha_inicio,fecha_
         accion = diccionario["ticker"]
         lista_resultados = diccionario["results"]
         print("Acción elegida = ",accion)
-        # print(lista_resultados)
-        #print(type(lista_resultados))
-  #aqui recorremos los difernetes valores de la lista y los mostramos (aca iran guardandose los registros en la BD)
+        #aqui recorremos los difernetes valores de la lista y los mostramos (aca se guardan los registros en la BD)
 
-    for indice in lista_resultados:
-        print("Volúmen = ",indice['v'])
-        print("Precio de apertura = ",indice['o'])
-        print("Transacciones = ",indice['n'])
-        print("Menor precio = ",indice['l'])
-        print("Mayor precio = ",indice['h'])
+        for indice in lista_resultados:
+            #print("Volúmen = ",indice['v'])
+            #print("Precio de apertura = ",indice['o'])
+            #print("Transacciones = ",indice['n'])
+            #print("Menor precio = ",indice['l'])
+            #print("Mayor precio = ",indice['h'])
+
+            # le pasamos los argumentos a la función insertar_db para que ella guarda los valores en la tabla de la BD
+            insertar_db(
+                especie,
+                indice['o'],
+                indice['n'],
+                indice['l'],
+                indice['h'],
+                fecha_inicio,
+                fecha_fin,
+                indice['v']
+                )
+
+####################################################################################
+#             FUNCIONES PARA TRABAJAR CON LA BASE DE DATOS  (SQLite3)              *
+####################################################################################
+
+#                         CONSULTAR REGISTRO A LA BASE DE DATOS                    *
+
+def consultar_db():
+    # Creamos una conexión con la base de datos
+    con = sqlite3.connect('db_finanzas.db')
+
+    # Creamos el curso para interactuar con los datos
+    cursor = con.cursor()
+
+    x = 15
+    # Ejecutar comandos de SQL
+    res = cursor.execute(f'''
+        SELECT *
+        FROM registros_API
+        ORDER BY especie DESC
+        LIMIT {x};
+    ''')
+    for row in res:
+        print(row)
+    con.close()
+
+#                         INSERTAR REGISTRO A LA BASE DE DATOS                    *
+
+def insertar_db(p_especie,p_precio_apertura,p_transacciones,p_menor_precio,p_mayor_precio,p_fecha_inicio,p_fecha_fin,p_volumen):
+    # Creamos una conexión con la base de datos
+    con = sqlite3.connect('db_finanzas.db')
+
+    # Creamos el curso para interactuar con los datos
+    cursor = con.cursor()
+    #print(p_especie,p_precio_apertura,p_transacciones,p_menor_precio,p_mayor_precio,p_fecha_inicio,p_fecha_fin,p_volumen)
+    # Ejecutar comandos de SQL
+    res = cursor.executescript(f'''
+           INSERT INTO
+           registros_API(especie,precio_apertura,transacciones,menor_precio,mayor_precio,fecha_inicio,fecha_fin,volumen,id)
+            VALUES("{p_especie}", {p_precio_apertura}, {p_transacciones}, {p_menor_precio}, {p_mayor_precio},
+           "{p_fecha_inicio}", "{p_fecha_fin}", {p_volumen}, 4)
+           ;
+       ''')
+    con.close()
+    #VALUES("{p_especie}", {p_precio_apertura}, {p_transacciones}, {p_menor_precio}, {p_mayor_precio},
+     #      "{p_fecha_inicio}", "{p_fecha_fin}", {p_volumen}, 4)
+
+    # ,precio_apertura,transacciones,menor_precio,mayor_precio,fecha_inicio,fecha_fin,volumen,id)
+    # , 21.34, 100, 20.82, 22.03, "2020-02-29", "2021-12-04", 253000.23,2)
+    #{p_especie},{p_precio_apertura},{p_transacciones},{p_menor_precio},{p_mayor_precio},{p_fecha_inicio},{p_fecha_fin},{p_volumen}
+
