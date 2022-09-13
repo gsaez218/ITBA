@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 import requests
 import sqlite3
 
@@ -51,7 +52,7 @@ def ingresar_fechas():
 def consultar_api_finanzas(especie,fecha_inicio,fecha_fin):#,fecha_inicio,fecha_fin):
     # Obtenemos la información del mensaje en formato JSON del repositorio consultando la API
     json_file = requests.get(f"https://api.polygon.io/v2/aggs/ticker/{especie}/range/1/day/{fecha_inicio}/{fecha_fin}?adjusted=true&sort=asc&limit=120&apiKey=kgNXTHqp5bQH1_H3RcUbUQFk73CB59Z3")
-    print(json_file.text)
+    #print(json_file.text)
 
     # Longitud en bytes del archivo
     #print(len(json_file.content))
@@ -61,11 +62,11 @@ def consultar_api_finanzas(especie,fecha_inicio,fecha_fin):#,fecha_inicio,fecha_
 
     # El if verifica que existan valores cargados, la variable queryCount nos los dice, ya que si se pide poor ej un sabado y un domingo no hay registros por lo tanto se avisa al usuario
     if diccionario["queryCount"]==0:
-        print("no se registraron valores para ese rango de fechas")
+        print("no se encontraron registros para esta consulta")
     else:
         accion = diccionario["ticker"]
         lista_resultados = diccionario["results"]
-        print("Acción elegida = ",accion)
+        #print("Acción elegida = ",accion)
         #aqui recorremos los difernetes valores de la lista y los mostramos (aca se guardan los registros en la BD)
 
         for indice in lista_resultados:
@@ -86,6 +87,7 @@ def consultar_api_finanzas(especie,fecha_inicio,fecha_fin):#,fecha_inicio,fecha_
                 fecha_fin,
                 indice['v']
                 )
+        print("Datos guardados correctamente")
 
 ####################################################################################
 #             FUNCIONES PARA TRABAJAR CON LA BASE DE DATOS  (SQLite3)              *
@@ -133,4 +135,24 @@ def insertar_db(p_especie,p_precio_apertura,p_transacciones,p_menor_precio,p_may
     con.commit()
     con.close()
 
-    # res = cursor.executescript(f'''
+
+def menu_opcion_1():
+    os.system('cls')
+    print("*****************************************")
+    print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
+    print("*****************************************")
+    print("MENU - Actualización de datos \n ")
+    especie = input("Ingrese la especie financiera a consultar: ")
+    fechas = ingresar_fechas()
+    print("Pidiendo datos...")
+    consultar_api_finanzas(especie, fechas[0], fechas[1])
+
+def menu_opcion_2():
+    os.system('cls')
+    print("*****************************************")
+    print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
+    print("*****************************************")
+    print("MENU - Visualización de datos \n ")
+    os.system("cls")
+    print("Resultado de la consulta")
+    consultar_db()

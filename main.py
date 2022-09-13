@@ -1,26 +1,30 @@
 #ref xtra usada: https://es.stackoverflow.com/questions/416227/acceder-a-funciones-desde-otro-archivo-en-python
 from funciones import *
 
-print("*****************************************")
-print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
-print("*****************************************")
-print("MENU")
-print("1- Actualización de datos")
-print("2- Visualización de datos")
-print("3. Salir")
-opcion_menu_principal=input("Elija opción y presione enter")
 
-if opcion_menu_principal=="1":
-    fechas = ingresar_fechas()
-    especie = input("Ingrese la especie financiera a consultar")
-    consultar_api_finanzas(especie, fechas[0], fechas[1])
-elif opcion_menu_principal=="2":
-    print("Visulaización de datos")
-    consultar_db()
-elif opcion_menu_principal=="3":
-    print("Salir")
-else:
-    print("Opción incorrecta")
+while True:
+    print("*****************************************")
+    print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
+    print("*****************************************")
+    print("MENU PRINCIPAL")
+    print("1- Actualización de datos")
+    print("2- Visualización de datos")
+    print("3. Salir")
+    print("\n")
+    opcion_menu_principal = input("Elija opción y presione enter: ")
+    if opcion_menu_principal == "1":
+        menu_opcion_1()
+    elif opcion_menu_principal == "2":
+        menu_opcion_2()
+    elif opcion_menu_principal == "3":
+        os.system("cls")
+        print("Gracias por usar nuestros servicios")
+        break
+    else:
+        print("Opción incorrecta")
+
+
+
 
 
 
