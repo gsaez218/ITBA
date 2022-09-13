@@ -100,14 +100,15 @@ def consultar_db():
     # Creamos el curso para interactuar con los datos
     cursor = con.cursor()
 
-    x = 15
+    #x = 15
     # Ejecutar comandos de SQL
     res = cursor.execute(f'''
         SELECT *
         FROM registros_API
         ORDER BY especie DESC
-        LIMIT {x};
     ''')
+    #    LIMIT {x};
+
     for row in res:
         print(row)
     con.close()
@@ -124,16 +125,12 @@ def insertar_db(p_especie,p_precio_apertura,p_transacciones,p_menor_precio,p_may
     # Ejecutar comandos de SQL
     res = cursor.executescript(f'''
            INSERT INTO
-           registros_API(especie,precio_apertura,transacciones,menor_precio,mayor_precio,fecha_inicio,fecha_fin,volumen,id)
+           registros_API(especie,precio_apertura,transacciones,menor_precio,mayor_precio,fecha_inicio,fecha_fin,volumen)
             VALUES("{p_especie}", {p_precio_apertura}, {p_transacciones}, {p_menor_precio}, {p_mayor_precio},
-           "{p_fecha_inicio}", "{p_fecha_fin}", {p_volumen}, 4)
+           "{p_fecha_inicio}", "{p_fecha_fin}", {p_volumen})
            ;
        ''')
+    con.commit()
     con.close()
-    #VALUES("{p_especie}", {p_precio_apertura}, {p_transacciones}, {p_menor_precio}, {p_mayor_precio},
-     #      "{p_fecha_inicio}", "{p_fecha_fin}", {p_volumen}, 4)
 
-    # ,precio_apertura,transacciones,menor_precio,mayor_precio,fecha_inicio,fecha_fin,volumen,id)
-    # , 21.34, 100, 20.82, 22.03, "2020-02-29", "2021-12-04", 253000.23,2)
-    #{p_especie},{p_precio_apertura},{p_transacciones},{p_menor_precio},{p_mayor_precio},{p_fecha_inicio},{p_fecha_fin},{p_volumen}
-
+    # res = cursor.executescript(f'''
