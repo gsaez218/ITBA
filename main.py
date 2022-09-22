@@ -2,6 +2,70 @@
 from funciones import *
 
 
+
+
+import pandas as pd
+from numpy import *
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+
+consultar_pandas_db()
+
+#fig = plt.figure()  # an empty figure with no Axes
+#fig, ax = plt.subplots()  # a figure with a single Axes
+fig, axs = plt.subplots(3, 3)  # a figure with a 2x2 grid of Axes
+
+mpl.use('TkAgg')
+
+ts = pd.Series(random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
+ts = ts.cumsum()
+ts.plot()
+plt.show()
+print(mpl.get_backend())
+
+x = np.linspace(0, 2, 100)  # Sample data.
+
+# Note that even in the OO-style, we use `.pyplot.figure` to create the Figure.
+fig, ax = plt.subplots(figsize=(5, 2.7))
+ax.plot(x, x, label='linear')  # Plot some data on the axes.
+ax.plot(x, x**2, label='quadratic')  # Plot more data on the axes...
+ax.plot(x, x**3, label='cubic')  # ... and some more.
+ax.set_xlabel('x label')  # Add an x-label to the axes.
+ax.set_ylabel('y label')  # Add a y-label to the axes.
+ax.set_title("Simple Plot")  # Add a title to the axes.
+ax.legend();  # Add a legend.
+plt.show()
+####################################################################
+
+
+
+
+
+
+
+#%matplotlib inline
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
 while True:
     print("*****************************************")
     print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
@@ -22,9 +86,7 @@ while True:
         break
     else:
         print("Opción incorrecta")
-
-
-
+"""
 
 
 
