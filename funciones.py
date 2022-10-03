@@ -145,10 +145,35 @@ def insertar_db(p_especie, p_precio_apertura, p_transacciones, p_menor_precio, p
 
 
 ####################################################################################
-#             FUNCIONES PARA MANEJO DEL MENU              *
+#             FUNCION PARA MANEJO DEL MENU     PRINCIPAL                          #
+##################################################################################
+def menu_principal():
+    while True:
+        print("*****************************************")
+        print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
+        print("*****************************************")
+        print("MENU PRINCIPAL")
+        print("1- Actualización de datos")
+        print("2- Visualización de datos")
+        print("3. Salir")
+        print("\n")
+        opcion_menu_principal = input("Elija opción y presione enter: ")
+        if opcion_menu_principal == "1":
+            menu_opcion_1()
+        elif opcion_menu_principal == "2":
+            menu_opcion_2()
+        elif opcion_menu_principal == "3":
+            print("Gracias por usar nuestros servicios")
+            break
+        else:
+            print("Opción incorrecta")
+
+
 ####################################################################################
+#             FUNCION PARA MANEJO DEL MENU  CONSULTA API  (Opción  1)             #
+##################################################################################
 def menu_opcion_1():
-    os.system('cls')
+    #os.system('cls')
     print("*****************************************")
     print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
     print("*****************************************")
@@ -158,42 +183,38 @@ def menu_opcion_1():
     print("Pidiendo datos...")
     consultar_api_finanzas(especie, fechas[0], fechas[1])
 
-
+####################################################################################
+#             FUNCION PARA MANEJO MENU VISUALIZACION      (Opción  2)             #
+##################################################################################
 def menu_opcion_2():
-    #os.system('cls')
-    print("*****************************************")
-    print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
-    print("*****************************************")
-    print("MENU - Visualización de datos \n ")
-   # os.system("cls")
-    print("1- Registros por especie")
-    print("2- Listado de grupos de especies por rango de fechas")
-    print("3- Gráfico de barras de una especie por rango de fechas")
-    print("4. Salir")
-    print("\n")
-    opcion_menu_visualizacion = input("Elija opción y presione enter: ")
-    if opcion_menu_visualizacion == "1":
-        especie=input("Ingrese especice a consultar")
-        consultar_registros_por_especie(especie)
-    elif opcion_menu_visualizacion == "2":
-         print("Los tickers guardados en la base de datos son:")
-         consultar_listado_especies()
-    elif opcion_menu_visualizacion == "3":
-        os.system("cls")
-        print("Gracias por usar nuestros servicios")
-        #break
-    else:
-        print("Opción incorrecta")
-
-   # print("Resultado de la consulta")
-    #consultar_db()
-    #consultar_pandas_db()
-
+    while True:
+        print("*****************************************")
+        print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
+        print("*****************************************")
+        print("MENU - Visualización de datos \n ")
+        print("1- Listado de registros por especie")
+        print("2- Listado de grupos de especies ordenados por fechas")
+        print("3- Gráfico de barras de una especie por rango de fechas")
+        print("4. Regresar al Menú Principal")
+        print("\n")
+        opcion_menu_visualizacion = input("Elija opción y presione enter: ")
+        if opcion_menu_visualizacion == "1":
+            especie = input("Ingrese especice a consultar")
+            consultar_registros_por_especie(especie)
+        elif opcion_menu_visualizacion == "2":
+            print("Los tickers guardados en la base de datos son:")
+            consultar_listado_especies()
+        elif opcion_menu_visualizacion == "3":
+            print("Grafico por especie")
+        elif opcion_menu_visualizacion == "4":
+             break
+        else:
+            print("Opción incorrecta")
 
 
 ####################################################################################
 #                     FUNCIONES PARA CONSULTAR bd CON PANDAS                      #
-###################################################################################
+##################################################################################
 def consultar_pandas_db():
     con = sqlite3.connect('db_finanzas.db')          # Crea una conexión a la base de datos SQLite
     # Usa read_sql_query de pandas para extraer el resultado de la consulta a un DataFrame
@@ -257,7 +278,6 @@ def consultar_listado_especies():
     pd.options.display.max_rows = None  # imprime todas las filas disponible si ponemos 5 muestra 5 filas
     pd.options.display.max_columns = None  # imprime todas las columnas disponible si ponemos 5 muestra 5 columnas
     listado=df.groupby(by=['especie','fecha_inicio','fecha_fin']).mean()
-    #print(listado[['especie','fecha_inicio','fecha_fin']])
     print(listado.iloc[:, [0, 2]])
 
 

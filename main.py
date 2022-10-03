@@ -7,26 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 
-while True:
-    print("*****************************************")
-    print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
-    print("*****************************************")
-    print("MENU PRINCIPAL")
-    print("1- Actualización de datos")
-    print("2- Visualización de datos")
-    print("3. Salir")
-    print("\n")
-    opcion_menu_principal = input("Elija opción y presione enter: ")
-    if opcion_menu_principal == "1":
-        menu_opcion_1()
-    elif opcion_menu_principal == "2":
-        menu_opcion_2()
-    elif opcion_menu_principal == "3":
-        os.system("cls")
-        print("Gracias por usar nuestros servicios")
-        break
-    else:
-        print("Opción incorrecta")
+menu_principal()
 
 
 
