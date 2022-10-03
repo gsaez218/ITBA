@@ -3,7 +3,8 @@ import os
 import requests
 import sqlite3
 import pandas as pd
-
+import matplotlib.pyplot as plt
+from numpy import *
 
 
 ####################################################################################
@@ -159,37 +160,104 @@ def menu_opcion_1():
 
 
 def menu_opcion_2():
-    os.system('cls')
+    #os.system('cls')
     print("*****************************************")
     print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
     print("*****************************************")
     print("MENU - Visualización de datos \n ")
-    os.system("cls")
-    print("Resultado de la consulta")
-    consultar_db()
+   # os.system("cls")
+    print("1- Registros por especie")
+    print("2- Listado de grupos de especies por rango de fechas")
+    print("3- Gráfico de barras de una especie por rango de fechas")
+    print("4. Salir")
+    print("\n")
+    opcion_menu_visualizacion = input("Elija opción y presione enter: ")
+    if opcion_menu_visualizacion == "1":
+        especie=input("Ingrese especice a consultar")
+        consultar_registros_por_especie(especie)
+    elif opcion_menu_visualizacion == "2":
+         print("Los tickers guardados en la base de datos son:")
+         consultar_listado_especies()
+    elif opcion_menu_visualizacion == "3":
+        os.system("cls")
+        print("Gracias por usar nuestros servicios")
+        #break
+    else:
+        print("Opción incorrecta")
+
+   # print("Resultado de la consulta")
+    #consultar_db()
+    #consultar_pandas_db()
+
 
 
 ####################################################################################
-#                     FUNCIONES PARA CONSUTAR bd CON PANDAS                        #
-####################################################################################
-# Crea una conexión a la base de datos SQLite
+#                     FUNCIONES PARA CONSULTAR bd CON PANDAS                      #
+###################################################################################
 def consultar_pandas_db():
-    con = sqlite3.connect('db_finanzas.db')
-    # Usa read_sql_query de pandas para extraer el resultado
-    # de la consulta a un DataFrame
-    # df = pd.read_sql_query("SELECT * from registros_API", con)
+    con = sqlite3.connect('db_finanzas.db')          # Crea una conexión a la base de datos SQLite
+    # Usa read_sql_query de pandas para extraer el resultado de la consulta a un DataFrame
     #pd.options.display.max_rows 60
     pd.options.display.max_columns = None  # imprime todas las columnas disponible si ponemos 5 muestra 5 columnas
     pd.set_option('display.width', 178)    # permite ajustar el ancho para que entren las columnas en pantalla
     df = pd.read_sql_query("SELECT * from registros_API WHERE precio_apertura>= 160 ORDER BY fecha_inicio", con)
+    con.close()
     # Verifica que el resultado de la consulta SQL está
     # almacenado en el DataFrame
     # print(df)#.head())
-    # No te olvides de cerrar la conexión
-    #print(df['precio_apertura'])
     print(df)
+    menor_precio_minimo = df['menor_precio'].min()
+    mayor_precio_minimo = df['menor_precio'].max()
+    menor_precio_maximo = df['mayor_precio'].min()
+    mayor_precio_maximo = df['mayor_precio'].max()
+    print(menor_precio_minimo)
+    print(mayor_precio_minimo)
+    print(menor_precio_maximo)
+    print(mayor_precio_maximo)
     apertura = df['precio_apertura']
-    apertura.plot(kind='bar');
+    apertura.plot(kind='bar')
+
+    ts = pd.Series(random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
+    ts = ts.cumsum()
+    fig, ax = plt.subplots(2, 1)
+    #ax[0,0]=apertura.plot(kind='bar')
+    #ts.plot()
+    #apertura.plot()
+    plt.show()
+
+
+
+####################################################################################
+#     FUNCION PARA CONSUTAR bd CON PANDAS DE LOS REGISTRO POR ESPECIE              #
+###################################################################################
+def consultar_registros_por_especie(p_especie):
+    con = sqlite3.connect('db_finanzas.db')  # Crea una conexión a la base de datos SQLite
+    # Usa read_sql_query de pandas para extraer el resultado de la consulta a un DataFrame
+    pd.options.display.max_rows = None      # imprime todas las filas disponible si ponemos 5 muestra 5 filas
+    pd.options.display.max_columns = None  # imprime todas las columnas disponible si ponemos 5 muestra 5 columnas
+    pd.set_option('display.width', 178)  # permite ajustar el ancho para que entren las columnas en pantalla
+    df = pd.read_sql_query(f"SELECT * from registros_API WHERE especie='{p_especie}' ORDER BY fecha_inicio", con)
     con.close()
+    # Verifica que el resultado de la consulta SQL está
+    # almacenado en el DataFrame
+    # print(df)#.head())
+    if len(df)==0:
+        print("No se encontraron registros para esa especie")
+    else:
+        print(df)
+
+####################################################################################
+#                     FUNCION PARA CONSULTAR bd CON PANDAS  AGRUPANDO             #
+###################################################################################
+def consultar_listado_especies():
+    con = sqlite3.connect('db_finanzas.db')          # Crea una conexión a la base de datos SQLite
+
+    df = pd.read_sql_query("SELECT * from registros_API", con)
+    con.close()
+    pd.options.display.max_rows = None  # imprime todas las filas disponible si ponemos 5 muestra 5 filas
+    pd.options.display.max_columns = None  # imprime todas las columnas disponible si ponemos 5 muestra 5 columnas
+    listado=df.groupby(by=['especie','fecha_inicio','fecha_fin']).mean()
+    #print(listado[['especie','fecha_inicio','fecha_fin']])
+    print(listado.iloc[:, [0, 2]])
 
 
