@@ -149,13 +149,14 @@ def insertar_db(p_especie, p_precio_apertura, p_transacciones, p_menor_precio, p
 ##################################################################################
 def menu_principal():
     while True:
-        print("*****************************************")
-        print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
-        print("*****************************************")
+        print("***********************************************")
+        print("* SISTEMA DE ALTA, BAJA Y CONSULTA FINANCIERA *")
+        print("***********************************************")
         print("MENU PRINCIPAL")
         print("1- Actualización de datos")
         print("2- Visualización de datos")
-        print("3. Salir")
+        print("3- Eliminación de datos")
+        print("4- Salir")
         print("\n")
         opcion_menu_principal = input("Elija opción y presione enter: ")
         if opcion_menu_principal == "1":
@@ -163,6 +164,8 @@ def menu_principal():
         elif opcion_menu_principal == "2":
             menu_opcion_2()
         elif opcion_menu_principal == "3":
+            menu_opcion_3()
+        elif opcion_menu_principal == "4":
             print("Gracias por usar nuestros servicios")
             break
         else:
@@ -210,6 +213,72 @@ def menu_opcion_2():
              break
         else:
             print("Opción incorrecta")
+
+####################################################################################
+#     FUNCION PARA MANEJO ELIMINACION DE REGISTROS DE LA BD      (Opción  3)      #
+##################################################################################
+def menu_opcion_3():
+    while True:
+        print("***********************************************")
+        print("* SISTEMA DE ALTA, BAJA Y CONSULTA FINANCIERA *")
+        print("***********************************************")
+        print("MENU - Eliminación de registros de la BD \n ")
+        print("1- Eliminar TODOS los registros de la BD")
+        print("2- Eliminar registros por especie")
+        print("3- Regresar al Menú Principal")
+        print("\n")
+        opcion_menu_visualizacion = input("Elija opción y presione enter: ")
+        if opcion_menu_visualizacion == "1":
+            eliminar_registros_bd()
+        elif opcion_menu_visualizacion == "2":
+            p_especie = input("Ingrese la especia a eliminar de la BD: ")
+            eliminar_especie_bd(p_especie)
+        elif opcion_menu_visualizacion == "3":
+             break
+        else:
+            print("Opción incorrecta")
+
+####################################################################################
+#     FUNCION PARA ELIMINACION DE REGISTROS DE LA BD (TODOS)                      #
+##################################################################################
+def eliminar_registros_bd():
+   con = sqlite3.connect('db_finanzas.db')           # Creamos una conexión con la base de datos
+   cursor = con.cursor()                             # Creamos el curso para interactuar con los datos
+   res = cursor.execute(f'''                         
+        DELETE 
+        FROM registros_API
+        ''')
+   con.commit()
+   con.close()
+   print("se eliminaron TODOS los registros de la BD")
+
+####################################################################################
+#     FUNCION PARA ELIMINACION DE REGISTROS DE LA BD (X ESPECIE)                      #
+##################################################################################
+def eliminar_especie_bd(p_especie):
+    con = sqlite3.connect('db_finanzas.db')  # Creamos una conexión con la base de datos
+    cursor = con.cursor()  # Creamos el curso para interactuar con los datos
+    res = cursor.execute(f'''
+           SELECT *
+           FROM registros_API
+           WHERE especie="{p_especie}"
+    ''')
+    cantidad_registros=(len(cursor.fetchall()))   # vemos cuantos registros devuelve  la consulta SQL
+    if cantidad_registros==0:
+        print("No se encontraron registros para la especie elegida")
+    else:
+        res = cursor.execute(f'''                         
+             DELETE 
+             FROM registros_API
+             WHERE especie="{p_especie}"
+        ''')
+        print("se eliminaron ",cantidad_registros," registros de la BD correspondeinte a la especie ", p_especie)
+    con.commit()
+    con.close()
+
+
+
+
 
 
 ####################################################################################
