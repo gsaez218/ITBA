@@ -11,5 +11,7 @@ Se incluirá un documento de word que muestra con mas detalle las acciones y dec
 El ide empleado es Pycharm y se configuró en él el control de versiones GIT, tanto local (commints en mi pc) como este reposiorio donde voy haciendo push para mostrar los cambios más importantes. 
 
 Comnandos para dependencias
+
 pip freeze > dependencias.txt 
+
 pip install -r dependencias.txt
