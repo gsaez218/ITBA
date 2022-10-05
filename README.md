@@ -1,4 +1,6 @@
 # ITBA
+
+
 Repositorio del proyecto final de la capacitación profesional en python (ITBA 2022) de Gastón Saez de Arregui.
 
 En el archivo main.py se encuenta la llamada principal a las diferentes opciones de lo solicitado. En funciones.py se incluyen las funciones de cada acción que son
