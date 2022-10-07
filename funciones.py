@@ -4,11 +4,11 @@ import requests
 import sqlite3
 import pandas as pd
 import matplotlib.pyplot as plt
-from numpy import *
-
+#from numpy import *
+import numpy as np
 
 ####################################################################################
-# FUNCION PARA GESTION DE LAS FECHAS
+#                       FUNCION PARA GESTION DE LAS FECHAS                         #
 ####################################################################################
 def ingresar_fechas():
     # referencia extra usada:   https://parzibyte.me/blog/2020/04/23/validar-fecha-python/
@@ -51,7 +51,7 @@ def ingresar_fechas():
 
 
 ####################################################################################
-# FUNCION CONSULTA API DE FINANZAS
+#                       FUNCION CONSULTA API DE FINANZAS                           #
 ####################################################################################
 def consultar_api_finanzas(especie, fecha_inicio, fecha_fin):  # ,fecha_inicio,fecha_fin):
     # Obtenemos la información del mensaje en formato JSON del repositorio consultando la API
@@ -96,7 +96,7 @@ def consultar_api_finanzas(especie, fecha_inicio, fecha_fin):  # ,fecha_inicio,f
 
 
 ####################################################################################
-#             FUNCIONES PARA TRABAJAR CON LA BASE DE DATOS  (SQLite3)              *
+#             FUNCIONES PARA TRABAJAR CON LA BASE DE DATOS  (SQLite3)              #
 ####################################################################################
 
 #                         CONSULTAR REGISTRO A LA BASE DE DATOS                    *
@@ -145,102 +145,8 @@ def insertar_db(p_especie, p_precio_apertura, p_transacciones, p_menor_precio, p
 
 
 ####################################################################################
-#             FUNCION PARA MANEJO DEL MENU     PRINCIPAL                          #
-##################################################################################
-def menu_principal():
-    while True:
-        print("***********************************************")
-        print("* SISTEMA DE ALTA, BAJA Y CONSULTA FINANCIERA *")
-        print("***********************************************")
-        print("MENU PRINCIPAL")
-        print("1- Actualización de datos")
-        print("2- Visualización de datos")
-        print("3- Eliminación de datos")
-        print("4- Salir")
-        print("\n")
-        opcion_menu_principal = input("Elija opción y presione enter: ")
-        if opcion_menu_principal == "1":
-            menu_opcion_1()
-        elif opcion_menu_principal == "2":
-            menu_opcion_2()
-        elif opcion_menu_principal == "3":
-            menu_opcion_3()
-        elif opcion_menu_principal == "4":
-            print("Gracias por usar nuestros servicios")
-            break
-        else:
-            print("Opción incorrecta")
-
-
+#     FUNCION PARA ELIMINACION DE REGISTROS DE LA BD (TODOS)                       #
 ####################################################################################
-#             FUNCION PARA MANEJO DEL MENU  CONSULTA API  (Opción  1)             #
-##################################################################################
-def menu_opcion_1():
-    #os.system('cls')
-    print("*****************************************")
-    print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
-    print("*****************************************")
-    print("MENU - Actualización de datos \n ")
-    especie = input("Ingrese la especie financiera a consultar: ")
-    fechas = ingresar_fechas()
-    print("Pidiendo datos...")
-    consultar_api_finanzas(especie, fechas[0], fechas[1])
-
-####################################################################################
-#             FUNCION PARA MANEJO MENU VISUALIZACION      (Opción  2)             #
-##################################################################################
-def menu_opcion_2():
-    while True:
-        print("*****************************************")
-        print("* SISTEMA DE ALTA Y CONSULTA FINANCIERA *")
-        print("*****************************************")
-        print("MENU - Visualización de datos \n ")
-        print("1- Listado de registros por especie")
-        print("2- Listado de grupos de especies ordenados por fechas")
-        print("3- Gráfico de barras de una especie por rango de fechas")
-        print("4. Regresar al Menú Principal")
-        print("\n")
-        opcion_menu_visualizacion = input("Elija opción y presione enter: ")
-        if opcion_menu_visualizacion == "1":
-            especie = input("Ingrese especice a consultar")
-            consultar_registros_por_especie(especie)
-        elif opcion_menu_visualizacion == "2":
-            print("Los tickers guardados en la base de datos son:")
-            consultar_listado_especies()
-        elif opcion_menu_visualizacion == "3":
-            print("Grafico por especie")
-        elif opcion_menu_visualizacion == "4":
-             break
-        else:
-            print("Opción incorrecta")
-
-####################################################################################
-#     FUNCION PARA MANEJO ELIMINACION DE REGISTROS DE LA BD      (Opción  3)      #
-##################################################################################
-def menu_opcion_3():
-    while True:
-        print("***********************************************")
-        print("* SISTEMA DE ALTA, BAJA Y CONSULTA FINANCIERA *")
-        print("***********************************************")
-        print("MENU - Eliminación de registros de la BD \n ")
-        print("1- Eliminar TODOS los registros de la BD")
-        print("2- Eliminar registros por especie")
-        print("3- Regresar al Menú Principal")
-        print("\n")
-        opcion_menu_visualizacion = input("Elija opción y presione enter: ")
-        if opcion_menu_visualizacion == "1":
-            eliminar_registros_bd()
-        elif opcion_menu_visualizacion == "2":
-            p_especie = input("Ingrese la especia a eliminar de la BD: ")
-            eliminar_especie_bd(p_especie)
-        elif opcion_menu_visualizacion == "3":
-             break
-        else:
-            print("Opción incorrecta")
-
-####################################################################################
-#     FUNCION PARA ELIMINACION DE REGISTROS DE LA BD (TODOS)                      #
-##################################################################################
 def eliminar_registros_bd():
    con = sqlite3.connect('db_finanzas.db')           # Creamos una conexión con la base de datos
    cursor = con.cursor()                             # Creamos el curso para interactuar con los datos
@@ -252,9 +158,10 @@ def eliminar_registros_bd():
    con.close()
    print("se eliminaron TODOS los registros de la BD")
 
+
 ####################################################################################
-#     FUNCION PARA ELIMINACION DE REGISTROS DE LA BD (X ESPECIE)                      #
-##################################################################################
+#     FUNCION PARA ELIMINACION DE REGISTROS DE LA BD (X ESPECIE)                   #
+####################################################################################
 def eliminar_especie_bd(p_especie):
     con = sqlite3.connect('db_finanzas.db')  # Creamos una conexión con la base de datos
     cursor = con.cursor()  # Creamos el curso para interactuar con los datos
@@ -277,46 +184,6 @@ def eliminar_especie_bd(p_especie):
     con.close()
 
 
-
-
-
-
-####################################################################################
-#                     FUNCIONES PARA CONSULTAR bd CON PANDAS                      #
-##################################################################################
-def consultar_pandas_db():
-    con = sqlite3.connect('db_finanzas.db')          # Crea una conexión a la base de datos SQLite
-    # Usa read_sql_query de pandas para extraer el resultado de la consulta a un DataFrame
-    #pd.options.display.max_rows 60
-    pd.options.display.max_columns = None  # imprime todas las columnas disponible si ponemos 5 muestra 5 columnas
-    pd.set_option('display.width', 178)    # permite ajustar el ancho para que entren las columnas en pantalla
-    df = pd.read_sql_query("SELECT * from registros_API WHERE precio_apertura>= 160 ORDER BY fecha_inicio", con)
-    con.close()
-    # Verifica que el resultado de la consulta SQL está
-    # almacenado en el DataFrame
-    # print(df)#.head())
-    print(df)
-    menor_precio_minimo = df['menor_precio'].min()
-    mayor_precio_minimo = df['menor_precio'].max()
-    menor_precio_maximo = df['mayor_precio'].min()
-    mayor_precio_maximo = df['mayor_precio'].max()
-    print(menor_precio_minimo)
-    print(mayor_precio_minimo)
-    print(menor_precio_maximo)
-    print(mayor_precio_maximo)
-    apertura = df['precio_apertura']
-    apertura.plot(kind='bar')
-
-    ts = pd.Series(random.randn(1000), index=pd.date_range('1/1/2000', periods=1000))
-    ts = ts.cumsum()
-    fig, ax = plt.subplots(2, 1)
-    #ax[0,0]=apertura.plot(kind='bar')
-    #ts.plot()
-    #apertura.plot()
-    plt.show()
-
-
-
 ####################################################################################
 #     FUNCION PARA CONSUTAR bd CON PANDAS DE LOS REGISTRO POR ESPECIE              #
 ###################################################################################
@@ -336,9 +203,10 @@ def consultar_registros_por_especie(p_especie):
     else:
         print(df)
 
+
 ####################################################################################
-#                     FUNCION PARA CONSULTAR bd CON PANDAS  AGRUPANDO             #
-###################################################################################
+#                     FUNCION PARA CONSULTAR bd CON PANDAS  AGRUPANDO              #
+####################################################################################
 def consultar_listado_especies():
     con = sqlite3.connect('db_finanzas.db')          # Crea una conexión a la base de datos SQLite
 
@@ -350,3 +218,102 @@ def consultar_listado_especies():
     print(listado.iloc[:, [0, 2]])
 
 
+####################################################################################
+#                     FUNCIONES PARA CONSULTAR bd CON PANDAS                       #
+####################################################################################
+def consultar_pandas_db():
+    p_especie = input("Ingrese la especie financiera a consultar: ")
+    #fechas = ingresar_fechas()
+    con = sqlite3.connect('db_finanzas.db')          # Crea una conexión a la base de datos SQLite
+    # Usa read_sql_query de pandas para extraer el resultado de la consulta a un DataFrame
+    #pd.options.display.max_rows 60
+    pd.options.display.max_columns = None  # imprime todas las columnas disponible si ponemos 5 muestra 5 columnas
+    pd.set_option('display.width', 178)    # permite ajustar el ancho para que entren las columnas en pantalla
+    #df = pd.read_sql_query("SELECT * from registros_API WHERE precio_apertura>= 160 ORDER BY fecha_inicio", con)
+    df = pd.read_sql_query(
+        f"SELECT * from registros_API WHERE especie='{p_especie}' ORDER BY fecha_inicio",
+        con)
+    con.close()
+
+    """
+    print(df)
+    print("Menor precio \n", df['menor_precio'])
+    print(df.index)
+    menor_precio_minimo = df['menor_precio'].min()
+    mayor_precio_minimo = df['menor_precio'].max()
+    menor_precio_maximo = df['mayor_precio'].min()
+    mayor_precio_maximo = df['mayor_precio'].max()
+    print(menor_precio_minimo)
+    print(mayor_precio_minimo)
+    print(menor_precio_maximo)
+    print(mayor_precio_maximo)
+"""
+
+    t=(df.index)
+    apertura=(df['precio_apertura'])
+    menor_p=(df['menor_precio'])
+    mayor_p=(df['mayor_precio'])
+    fig, axs = plt.subplots(2, 1)
+    plt.title('Pedidos de postres')
+    axs[0].plot(t, apertura, t, menor_p, t, mayor_p)
+    axs[0].set_xlim(0, df.index.max())
+   # axs[0].set_xlabel('Evolución de los registros')
+    axs[0].set_ylabel('Precios    [U$s]')
+    axs[0].grid(True)
+    axs[0].legend(['Precio apertura', 'Menor precio', 'Mayor precio'], loc=0)
+
+    transacciones = (df['transacciones'])
+    axs[1].plot(t, transacciones)
+    axs[1].set_xlim(0, df.index.max())
+    axs[1].set_xlabel('Evolución de los registros')
+    axs[1].set_ylabel('Transacciones    [millones]')
+    axs[1].grid(True)
+
+    plt.show()
+    plt.close('all')
+
+
+"""
+
+    fig, ax = plt.subplots()
+    x_values = (df.index)
+    y_values = (df['transacciones'])
+    plt.bar(x_values, y_values)
+
+
+   # apertura = df['precio_apertura']
+    #apertura.plot(kind='bar')
+
+    #########################################################################
+
+    # Fixing random state for reproducibility
+    np.random.seed(19680801)
+
+    dt = 0.01
+    t = np.arange(0, 30, dt)
+    nse1 = np.random.randn(len(t))  # white noise 1
+    nse2 = np.random.randn(len(t))  # white noise 2
+
+    # Two signals with a coherent part at 10Hz and a random part
+    s1 = np.sin(2 * np.pi * 10 * t) + nse1
+    s2 = np.sin(2 * np.pi * 10 * t) + nse2
+
+
+
+    fig, axs = plt.subplots(2, 1)
+    axs[0].plot(t, s1, t, s2)
+    axs[0].set_xlim(0, 2)
+    axs[0].set_xlabel('time')
+    axs[0].set_ylabel('s1 and s2')
+    axs[0].grid(True)
+
+    cxy, f = axs[1].cohere(s1, s2, 256, 1. / dt)
+    axs[1].set_ylabel('coherence')
+
+    fig.tight_layout()
+    plt.show()
+
+#########################################################################
+
+    #plt.show()
+"""

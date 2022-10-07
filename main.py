@@ -1,5 +1,6 @@
 #ref xtra usada: https://es.stackoverflow.com/questions/416227/acceder-a-funciones-desde-otro-archivo-en-python
 from funciones import *
+from menu import *
 import pandas as pd
 from numpy import *
 import numpy as np
