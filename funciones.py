@@ -234,86 +234,43 @@ def consultar_pandas_db():
         f"SELECT * from registros_API WHERE especie='{p_especie}' ORDER BY fecha_inicio",
         con)
     con.close()
+    if len(df)==0:
+        print("No se encontraron registros para esa especie")
+    else:
+        """
+            print(df)
+            print("Menor precio \n", df['menor_precio'])
+            print(df.index)
+            menor_precio_minimo = df['menor_precio'].min()
+            mayor_precio_minimo = df['menor_precio'].max()
+            menor_precio_maximo = df['mayor_precio'].min()
+            mayor_precio_maximo = df['mayor_precio'].max()
+            print(menor_precio_minimo)
+            print(mayor_precio_minimo)
+            print(menor_precio_maximo)
+            print(mayor_precio_maximo)
+        """
 
-    """
-    print(df)
-    print("Menor precio \n", df['menor_precio'])
-    print(df.index)
-    menor_precio_minimo = df['menor_precio'].min()
-    mayor_precio_minimo = df['menor_precio'].max()
-    menor_precio_maximo = df['mayor_precio'].min()
-    mayor_precio_maximo = df['mayor_precio'].max()
-    print(menor_precio_minimo)
-    print(mayor_precio_minimo)
-    print(menor_precio_maximo)
-    print(mayor_precio_maximo)
-"""
+        t = (df.index)  # como variable independiente del gráfico uso el índice del dataframe de pandas
+        apertura = (df['precio_apertura'])
+        menor_p = (df['menor_precio'])
+        mayor_p = (df['mayor_precio'])
 
-    t=(df.index)
-    apertura=(df['precio_apertura'])
-    menor_p=(df['menor_precio'])
-    mayor_p=(df['mayor_precio'])
-    fig, axs = plt.subplots(2, 1)
-    plt.title('Pedidos de postres')
-    axs[0].plot(t, apertura, t, menor_p, t, mayor_p)
-    axs[0].set_xlim(0, df.index.max())
-   # axs[0].set_xlabel('Evolución de los registros')
-    axs[0].set_ylabel('Precios    [U$s]')
-    axs[0].grid(True)
-    axs[0].legend(['Precio apertura', 'Menor precio', 'Mayor precio'], loc=0)
+        fig, axs = plt.subplots(2, 1)
+        axs[0].plot(t, apertura, t, menor_p, t, mayor_p)
+        axs[0].set_xlim(0, df.index.max())
+        # axs[0].set_xlabel('Evolución de los registros')
 
-    transacciones = (df['transacciones'])
-    axs[1].plot(t, transacciones)
-    axs[1].set_xlim(0, df.index.max())
-    axs[1].set_xlabel('Evolución de los registros')
-    axs[1].set_ylabel('Transacciones    [millones]')
-    axs[1].grid(True)
+        axs[0].set_ylabel('Precios    [U$s]')
+        axs[0].grid(True)
+        axs[0].legend(['Precio apertura', 'Menor precio', 'Mayor precio'], loc=0)
+        transacciones = (df['transacciones'])
+        axs[1].plot(t, transacciones)
+        axs[1].set_xlim(0, df.index.max())
+        axs[1].set_xlabel('Evolución de los registros')
+        axs[1].set_ylabel('Transacciones    [millones]')
+        axs[1].grid(True)
 
-    plt.show()
-    plt.close('all')
-
-
-"""
-
-    fig, ax = plt.subplots()
-    x_values = (df.index)
-    y_values = (df['transacciones'])
-    plt.bar(x_values, y_values)
-
-
-   # apertura = df['precio_apertura']
-    #apertura.plot(kind='bar')
-
-    #########################################################################
-
-    # Fixing random state for reproducibility
-    np.random.seed(19680801)
-
-    dt = 0.01
-    t = np.arange(0, 30, dt)
-    nse1 = np.random.randn(len(t))  # white noise 1
-    nse2 = np.random.randn(len(t))  # white noise 2
-
-    # Two signals with a coherent part at 10Hz and a random part
-    s1 = np.sin(2 * np.pi * 10 * t) + nse1
-    s2 = np.sin(2 * np.pi * 10 * t) + nse2
-
-
-
-    fig, axs = plt.subplots(2, 1)
-    axs[0].plot(t, s1, t, s2)
-    axs[0].set_xlim(0, 2)
-    axs[0].set_xlabel('time')
-    axs[0].set_ylabel('s1 and s2')
-    axs[0].grid(True)
-
-    cxy, f = axs[1].cohere(s1, s2, 256, 1. / dt)
-    axs[1].set_ylabel('coherence')
-
-    fig.tight_layout()
-    plt.show()
-
-#########################################################################
-
-    #plt.show()
-"""
+        fig.tight_layout()
+        plt.show()
+        plt.close('all')
